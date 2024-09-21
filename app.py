@@ -14,15 +14,14 @@ app = Flask(__name__)
 
 # Function to clean the text
 def clean_text(text):
-    text = re.sub(r'\b[A-Z]{2,}\s(Reuters)|(Reuters)', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\b[A-Z]{2,}\s*\(Reuters\)|\(Reuters\)', '', text, flags=re.IGNORECASE)
     text = text.lower()
-    text = re.sub(r'[.?]', '', text)
-    text = re.sub("\W", " ", text)
-    text = re.sub(r'https?://\S+|www.\S+', '', text)
-    text = re.sub('<.?>+', '', text)
-    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
-    text = re.sub('\n', '', text)
-    text = re.sub(r'\w\d\w*', '', text)
+    text = re.sub(r'\[.*?\]', '', text)  
+    text = re.sub(r'\W+', ' ', text) 
+    text = re.sub(r'http[s]?://\S+', '', text) 
+    text = re.sub(r'<.*?>', '', text)  
+    text = re.sub(r'[%s]' % re.escape(string.punctuation), '', text)  
+    text = re.sub(r'\s+', ' ', text).strip()  
     return text
 
 # Load pre-trained Stacked model and vectorizer
