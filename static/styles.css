@@ -1,0 +1,466 @@
+/* General Body and Typography Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #E0F2E9;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+/* Header Titles */
+h1 {
+    text-align: center;
+    font-size: 4em;
+    margin-bottom: 10px;
+    margin-top: 200px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* Forms and Text Areas */
+form {
+    text-align: center;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+textarea {
+    border: 2px solid #333;
+    border-radius: 10px;
+    width: 100%;
+    height: 200px;
+    font-size: 1.2em;
+    padding: 10px;
+    margin-bottom: 20px;
+    resize: none;
+    background-color: white;
+    color: black;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.dark-mode button {
+    background-color: #ffc107; /* Yellow background for dark mode */
+    color: black; /* Dark text for contrast */
+}
+
+/* Buttons */
+button {
+    border: 2px solid #333;
+    border-radius: 10px;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+    background-color: #1A535C;
+    color: white;
+}
+
+button:hover {
+    background-color: #b5d4c3;
+}
+
+/* Result Container and Pie Chart */
+#result-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#result-container.visible {
+    opacity: 1;
+}
+
+#result {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.pie-chart {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #ffc107;
+    background: conic-gradient(#dc3545 0% 100%);
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.5s;
+}
+
+.pie-chart::before {
+    content: "";
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: #f8f8f8;
+    transition: background-color 0.5s;
+}
+
+.pie-chart p {
+    position: absolute;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1;
+}
+
+/* Dark Mode Styles */
+.dark-mode body {
+    background-color: #333;
+    color: white;
+}
+
+.dark-mode textarea {
+    background-color: #555;
+    color: white;
+}
+
+.dark-mode #result {
+    background-color: #444;
+    color: white;
+}
+
+.dark-mode .pie-chart::before {
+    background-color: #333;
+}
+
+/* Slider Switch */
+.switch {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    border-radius: 50%;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #1A535C;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Dark Mode Slider Styling */
+.moon-icon {
+    position: absolute;
+    top: 24px;
+    left: 85px;
+    font-size: 1.5em;
+    color: #1A535C;
+}
+
+.dark-mode .moon-icon {
+    color: #FFC107;
+}
+
+/* Footer */
+footer {
+    margin-top: 70px;
+    text-align: center;
+}
+
+footer a {
+    margin-left: 10px;
+    color: #007BFF;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form,
+    #result,
+    .pie-chart {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    textarea {
+        height: 150px;
+    }
+}
+
+/* Work.html Specific Styling */
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+p, ul, li {
+    font-size: 1.2em;
+    line-height: 1.6;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.dark-mode .container {
+    background-color: #444;
+    color: #f8f8f8;
+}
+
+.dark-mode p, .dark-mode ul, .dark-mode li, .dark-mode h1 {
+    color: #f8f8f8;
+}
+
+.dark-mode a {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.dark-mode a:hover {
+    background-color: #e0a800;
+}
+
+a {
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+    background-color: #1A535C;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+a:hover {
+    background-color: #b5d4c3;
+}
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Separate navbar-left and navbar-right */
+    background-color: #92b6a4;
+    padding: 10px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Links within the navbar */
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin-left: 20px;
+    border-radius: 5px;
+    background-color: #1A535C;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for the navbar links */
+.navbar a:hover {
+    background-color: #b5d4c3;
+}
+
+/* Navbar left section */
+.navbar-left {
+    display: flex;
+    justify-content: flex-start; /* Align links to the left */
+    flex: 1;
+}
+
+/* Navbar right section for the dark mode toggle */
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Dark Mode Slider styling */
+.switch {
+    margin-left: 1790px;
+    display: inline-block;
+}
+
+.moon-icon {
+    margin-left : 1797px;
+    margin-top: -5px;
+}
+
+/* Dark Mode for Navbar */
+.dark-mode .navbar {
+    background-color: #444444; /* Dark grey for the navbar */
+}
+
+/* Dark Mode for Navbar Buttons */
+.dark-mode .navbar a {
+    background-color: #FFC107; /* Yellow for buttons */
+    color: #333333; /* Darker text on yellow buttons */
+}
+
+.dark-mode .navbar a:hover {
+    background-color: #e0a800; /* Darker yellow on hover */
+}
+
+/* Dark Mode Slider Color */
+.dark-mode .slider {
+    background-color: #FFC107; /* Yellow slider background */
+}
+
+.dark-mode .slider:before {
+    background-color: #333333; /* Dark color for the slider circle */
+}
+
+/* Dark Mode Moon Icon */
+.dark-mode .moon-icon {
+    color: #FFC107; /* Yellow moon icon */
+}
+
+
+/* Container specific to work.html */
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button-container {
+    margin-top: 30px;
+}
+
+/* Dark mode specific to work.html container */
+.dark-mode .container {
+    background-color: #444;
+    color: #f8f8f8;
+}
+
+.dark-mode p, .dark-mode ul, .dark-mode li, .dark-mode h1 {
+    color: #f8f8f8;
+}
+
+.dark-mode a {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.dark-mode a:hover {
+    background-color: #e0a800;
+}
+
+
+/* Specific to "How Does It Work?" Page */
+.how-it-works-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.how-it-works-container ul {
+    text-align: left;
+    list-style: none;
+    padding-left: 0;
+}
+
+.how-it-works-container p, .how-it-works-container ul, .how-it-works-container li {
+    font-size: 1.2em;
+    line-height: 1.6;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.how-it-works-container h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    margin-top: 30px;
+}
+
+/* Dark mode styling for "How Does It Work?" */
+.dark-mode .how-it-works-container {
+    background-color: #444;
+    color: #f8f8f8;
+}
+
+.dark-mode .how-it-works-container p, .dark-mode .how-it-works-container ul, .dark-mode .how-it-works-container li, .dark-mode .how-it-works-container h1 {
+    color: #f8f8f8;
+}
+
+.dark-mode .how-it-works-container a {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.dark-mode .how-it-works-container a:hover {
+    background-color: #e0a800;
+}

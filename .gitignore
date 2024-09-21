@@ -1,0 +1,32 @@
+# Ignore virtual environment files
+venv/
+.env
+
+# Ignore cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore logs and other temporary files
+*.log
+*.tmp
+*.swp
+
+# Ignore data files if you have any large datasets
+*.json
+*.xls
+*.xlsx
+
+# Ignore build artifacts and distribution files
+build/
+dist/
+*.egg-info/
+
+# Ignore local configuration files (e.g., secrets)
+*.env
+.DS_Store
+
+# Ignore version control system files
+.git/
+

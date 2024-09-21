@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <title>Fake News Detector</title>
+
+    <!-- Load dark mode class immediately if dark mode is enabled -->
+    <script>
+        (function () {
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.documentElement.classList.add('dark-mode'); // Apply dark mode class
+            }
+        })();
+    </script>
+
+    
+</head>
+
+<body>
+
+    <!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="/work">How does it work?</a>
+        <a href="/bert">BERT Detector</a>
+    </div>
+    <div class="navbar-right">
+        <label class="switch">
+            <input type="checkbox" id="toggle-dark-mode">
+            <span class="slider"></span>
+        </label>
+        <span class="moon-icon">🌙</span>
+    </div>
+</nav>
+   
+
+    <!-- Title -->
+    <h1>Fake News Detector</h1>
+
+    <h2>This tool analyzes news articles to determine whether they are likely to be fake or real.</h2>
+
+    <!-- Form to input news text -->
+    <form id="predictForm">
+        <textarea id="newsInput" placeholder="Enter a news article here..."></textarea>
+        <div class="button-container">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    <!-- Prediction result and pie chart -->
+    <div id="result-container">
+        <div id="result"></div>
+        <div class="pie-chart">
+            <p id="score-percent">0%</p>
+        </div>
+    </div>
+
+    <!-- Include the app.js file -->
+    <script src="static/app.js"></script>
+
+    <footer>
+        <p>Disclaimer: This tool uses machine learning to analyze text. Predictions are not always 100% accurate. Please double-check facts from reliable sources.</p>
+    </footer>
+
+    <!-- Toggle dark mode script -->
+    <script>
+        const toggleDarkModeCheckbox = document.getElementById('toggle-dark-mode');
+
+        // Check localStorage to see if dark mode was previously enabled
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.documentElement.classList.add('dark-mode');
+            toggleDarkModeCheckbox.checked = true; // Set slider to "on"
+
+        }
+
+        toggleDarkModeCheckbox.addEventListener('change', function () {
+            document.documentElement.classList.toggle('dark-mode');
+
+            if (document.documentElement.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+           
+            }
+        });
+    </script>
+</body>
+
+</html>

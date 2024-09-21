@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    <title>How Does It Work?</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #E0F2E9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            text-align: center;
+            margin-top: 200px;
+            margin-bottom: 350px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        p, ul, li {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .button-container {
+            margin-top: 30px;
+        }
+
+        a {
+            font-size: 1.2em;
+            color: white;
+            text-decoration: none;
+            background-color: #1A535C;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        a:hover {
+            background-color: #b5d4c3;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 2.5em;
+            }
+
+            button {
+                font-size: 1em;
+            }
+
+            textarea {
+                height: 100px;
+            }
+        }
+
+        /* Dark Mode Styling */
+        .dark-mode {
+            background-color: #333;
+        }
+
+        .dark-mode .container {
+            background-color: #555;
+            color: #f8f8f8;
+        }
+
+        .dark-mode p, .dark-mode ul, .dark-mode li, .dark-mode h1 {
+            color: #f8f8f8;
+        }
+
+        .dark-mode a {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .dark-mode a:hover {
+            background-color: #e0a800;
+        }
+
+        /* Slider switch styling */
+        .switch {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+        }
+
+         /* Moon icon next to the slider */
+         .moon-icon {
+            position: absolute;
+            top: 24px;
+            left: 85px;
+            font-size: 1.5em;
+            color: #007BFF;
+        }
+
+        .dark-mode .moon-icon {
+            color: #FFC107;
+        }
+
+        input:checked + .slider {
+            background-color: #1A535C;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <a href="/work">How does it work?</a>
+            <a href="/bert">BERT Detector</a>
+        </div>
+        <div class="navbar-right">
+            <label class="switch">
+                <input type="checkbox" id="toggle-dark-mode">
+                <span class="slider"></span>
+            </label>
+            <span class="moon-icon">🌙</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>How Does It Work?</h1>
+        <p>
+            The Fake News Detector uses advanced machine learning techniques to analyze news articles and determine
+            whether they are likely to be real or fake.
+        </p>
+        <p>
+            Here's a simple overview of how it works:
+        </p>
+        <ul style="text-align: left; list-style: none; padding-left: 0;">
+            <li><strong>1. You submit the news article:</strong> When you paste a news article into the text box, the model processes it.</li>
+            <li><strong>2. Text analysis:</strong> The model breaks down the article into patterns of words and phrases it has learned from thousands of articles.</li>
+            <li><strong>3. Prediction:</strong> Using its training, the model calculates the probability of whether the news is likely to be real or fake.</li>
+            <li><strong>4. Result:</strong> You see the prediction in percentage terms of how likely the article is real or fake.</li>
+        </ul>
+        <p>
+            The model doesn’t know everything, but it has learned from thousands of articles and can make predictions based on the patterns it has seen.
+        </p>
+
+        <div class="button-container">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const toggleDarkModeCheckbox = document.getElementById('toggle-dark-mode');
+
+        // Check localStorage to see if dark mode was previously enabled
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            toggleDarkModeCheckbox.checked = true; // Set slider to "on"
+        }
+
+        toggleDarkModeCheckbox.addEventListener('change', function () {
+            document.body.classList.toggle('dark-mode');
+
+            // Store the dark mode preference in localStorage
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
