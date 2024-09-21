@@ -14,7 +14,6 @@ __pycache__/
 *.swp
 
 # Ignore data files if you have any large datasets
-*.json
 *.xls
 *.xlsx
 
