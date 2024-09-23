@@ -2,6 +2,20 @@
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification, Trainer, TrainingArguments
 from datasets import Dataset
 import pandas as pd
+import re
+import string
+
+# Clean text function
+def clean_text(text):
+    text = re.sub(r'\b[A-Z]{2,}\s*\(Reuters\)|\(Reuters\)', '', text, flags=re.IGNORECASE)
+    text = text.lower()
+    text = re.sub(r'\[.*?\]', '', text)  
+    text = re.sub(r'\W+', ' ', text) 
+    text = re.sub(r'http[s]?://\S+', '', text) 
+    text = re.sub(r'<.*?>', '', text)  
+    text = re.sub(r'[%s]' % re.escape(string.punctuation), '', text)  
+    text = re.sub(r'\s+', ' ', text).strip()  
+    return text
 
 # Step 2: Load the datasets
 def load_and_combine_datasets(fake_news_file, real_news_file, frac=0.2):
@@ -9,9 +23,13 @@ def load_and_combine_datasets(fake_news_file, real_news_file, frac=0.2):
     fake_news = pd.read_csv(fake_news_file)
     real_news = pd.read_csv(real_news_file)
 
+    # Apply text cleaning
+    fake_news['text'] = fake_news['text'].apply(clean_text)
+    real_news['text'] = real_news['text'].apply(clean_text)
+
     # Label the datasets (1 for fake news, 0 for real news)
-    fake_news['label'] = 1
-    real_news['label'] = 0
+    fake_news['label'] = 0
+    real_news['label'] = 1
 
     # Combine both datasets and shuffle
     combined_data = pd.concat([fake_news, real_news]).sample(frac=frac).reset_index(drop=True)
