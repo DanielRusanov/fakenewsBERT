@@ -7,18 +7,20 @@ import string
 
 # Clean text function
 def clean_text(text):
+    # Remove mentions of "Reuters", photo credits, etc.
     text = re.sub(r'\b[A-Z]{2,}\s*\(Reuters\)|\(Reuters\)', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Photo by.*?(Getty Images|AP|Reuters)\.', '', text, flags=re.IGNORECASE) 
     text = text.lower()
+    text = re.sub(r'http[s]?://\S+', '', text)
+    text = re.sub(r'@\w+', '', text)
     text = re.sub(r'\[.*?\]', '', text)  
     text = re.sub(r'\W+', ' ', text) 
-    text = re.sub(r'http[s]?://\S+', '', text) 
-    text = re.sub(r'<.*?>', '', text)  
-    text = re.sub(r'[%s]' % re.escape(string.punctuation), '', text)  
-    text = re.sub(r'\s+', ' ', text).strip()  
+    text = re.sub(r'\s+', ' ', text).strip()
+    
     return text
 
 # Step 2: Load the datasets
-def load_and_combine_datasets(fake_news_file, real_news_file, frac=0.2):
+def load_and_combine_datasets(fake_news_file, real_news_file, max_articles=20000):
     # Load the fake and real news datasets
     fake_news = pd.read_csv(fake_news_file)
     real_news = pd.read_csv(real_news_file)
@@ -28,11 +30,16 @@ def load_and_combine_datasets(fake_news_file, real_news_file, frac=0.2):
     real_news['text'] = real_news['text'].apply(clean_text)
 
     # Label the datasets (1 for fake news, 0 for real news)
-    fake_news['label'] = 0
-    real_news['label'] = 1
+    fake_news['label'] = 1
+    real_news['label'] = 0
 
-    # Combine both datasets and shuffle
-    combined_data = pd.concat([fake_news, real_news]).sample(frac=frac).reset_index(drop=True)
+    # Combine both datasets
+    combined_data = pd.concat([fake_news, real_news])
+
+    # Limit to the first `max_articles` articles
+    combined_data = combined_data.sample(frac=1).reset_index(drop=True)  # Shuffle the dataset
+    combined_data = combined_data[:max_articles]  # Limit to the first max_articles
+
     return combined_data
 
 # Step 3: Tokenize the dataset
@@ -94,8 +101,8 @@ if __name__ == "__main__":
     fake_news_file = 'Fake.csv'
     real_news_file = 'True.csv'
 
-    # Load and combine the datasets with a subset of data (e.g., 20%)
-    combined_data = load_and_combine_datasets(fake_news_file, real_news_file, frac=0.2)
+    # Load and combine the datasets with a maximum of 20,000 articles
+    combined_data = load_and_combine_datasets(fake_news_file, real_news_file, max_articles=20000)
 
     # Tokenize the dataset
     tokenized_dataset = tokenize_data(combined_data)

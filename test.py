@@ -11,8 +11,8 @@ df_fake = pd.read_csv("Fake.csv")
 df_real = pd.read_csv("True.csv")
 
 # Add labels
-df_fake['label'] = 0 # Fake news
-df_real['label'] = 1  # Real news
+df_fake['label'] = 1  # Fake news
+df_real['label'] = 0  # Real news
 
 # Combine datasets
 df = pd.concat([df_fake, df_real])
@@ -57,19 +57,18 @@ encoded_inputs = bert_tokenizer(list(X_test), return_tensors="pt", padding=True,
 
 # Create a TensorDataset and DataLoader for batching
 test_dataset = TensorDataset(encoded_inputs['input_ids'], encoded_inputs['attention_mask'])
-test_loader = DataLoader(test_dataset, batch_size=8)  # Adjust the batch size to a smaller number if needed
+test_loader = DataLoader(test_dataset, batch_size=4)  # Reduce batch size to avoid memory issues
 
 # Move model to device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 bert_model.to(device)
 
-# Make predictions in smaller batches
+# Make predictions with BERT in batches
 all_predictions = []
 with torch.no_grad():
     for batch in test_loader:
         input_ids, attention_mask = [b.to(device) for b in batch]
         outputs = bert_model(input_ids=input_ids, attention_mask=attention_mask)
-        
         predictions = torch.argmax(outputs.logits, dim=1)
         all_predictions.extend(predictions.cpu().numpy())  # Move predictions to CPU and store them
 

@@ -1,12 +1,19 @@
 # Import necessary libraries
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.ensemble import StackingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 import joblib
 import string
 import re
 import os
 from flask import Flask, request, jsonify, render_template
 import torch
+import torch.nn.functional as F
 from transformers import DistilBertForSequenceClassification, DistilBertTokenizer
 
 # Flask app initialization
@@ -14,22 +21,73 @@ app = Flask(__name__)
 
 # Function to clean the text
 def clean_text(text):
+    # Remove mentions of "Reuters", photo credits, etc.
     text = re.sub(r'\b[A-Z]{2,}\s*\(Reuters\)|\(Reuters\)', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Photo by.*?(Getty Images|AP|Reuters)\.', '', text, flags=re.IGNORECASE) 
     text = text.lower()
+    text = re.sub(r'http[s]?://\S+', '', text)
+    text = re.sub(r'@\w+', '', text)
     text = re.sub(r'\[.*?\]', '', text)  
     text = re.sub(r'\W+', ' ', text) 
-    text = re.sub(r'http[s]?://\S+', '', text) 
-    text = re.sub(r'<.*?>', '', text)  
-    text = re.sub(r'[%s]' % re.escape(string.punctuation), '', text)  
-    text = re.sub(r'\s+', ' ', text).strip()  
+    text = re.sub(r'\s+', ' ', text).strip()
+    
     return text
 
-# Load pre-trained Stacked model and vectorizer
+# Train and save the Stacking Model if it does not exist
+def train_and_save_stacking_model():
+    # Load datasets
+    df_fake = pd.read_csv("Fake.csv")
+    df_real = pd.read_csv("True.csv")
+
+    # Add labels
+    df_fake['label'] = 1  # Fake news
+    df_real['label'] = 0  # Real news
+
+    # Sample 20,000 articles from each dataset to balance them
+    df_fake_sample = df_fake.sample(n=20000, random_state=42, replace=False)
+    df_real_sample = df_real.sample(n=20000, random_state=42, replace=False)
+
+    # Combine sampled datasets
+    df = pd.concat([df_fake_sample, df_real_sample])
+    df = df.sample(frac=1).reset_index(drop=True)  # Shuffle dataset
+
+    # Split into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(df['text'], df['label'], test_size=0.2, random_state=42)
+
+    # Vectorize the text data
+    vectorizer = TfidfVectorizer(max_features=10000, stop_words="english")
+    X_train_tfidf = vectorizer.fit_transform(X_train)
+    X_test_tfidf = vectorizer.transform(X_test)
+
+    # Define base models
+    base_models = [
+        ('lr', LogisticRegression()),
+        ('dt', DecisionTreeClassifier()),
+        ('rf', RandomForestClassifier()),
+        ('gb', GradientBoostingClassifier())
+    ]
+
+    # Stacking classifier
+    stacking_model = StackingClassifier(estimators=base_models, final_estimator=LogisticRegression())
+
+    # Train the stacking model
+    stacking_model.fit(X_train_tfidf, y_train)
+
+    # Save the trained model and vectorizer
+    joblib.dump(stacking_model, 'best_stacking_model.pkl')
+    joblib.dump(vectorizer, 'vectorizer.pkl')
+    print("Stacking model and vectorizer saved.")
+
+
+# Try to load the Stacked model and vectorizer, if they don't exist, train and save them
 try:
     best_stacked_model = joblib.load('best_stacking_model.pkl')
     vectorization = joblib.load('vectorizer.pkl')
-except Exception as e:
-    print(f"Error loading Stacked model or vectorizer: {str(e)}")
+except:
+    print("Stacking model or vectorizer not found, training a new model...")
+    train_and_save_stacking_model()
+    best_stacked_model = joblib.load('best_stacking_model.pkl')
+    vectorization = joblib.load('vectorizer.pkl')
 
 # Load pre-trained BERT model and tokenizer
 try:
@@ -56,22 +114,25 @@ def manual_testing(news):
 # Function for prediction using BERT model
 def predict_news_bert(news_text):
     try:
-        inputs = tokenizer(news_text, return_tensors="pt", padding=True, truncation=True, max_length=512)
+        cleaned_text = clean_text(news_text)  # Clean text consistently
+        inputs = tokenizer(cleaned_text, return_tensors="pt", padding=True, truncation=True, max_length=512)
         inputs = {key: value.to(device) for key, value in inputs.items()}
         with torch.no_grad():
             outputs = bert_model(**inputs)
             logits = outputs.logits
-            prediction = torch.argmax(logits, dim=-1).item()
 
-            # Assuming 1 for Fake, 0 for Real
-            if prediction == 1:
-                fake_score = logits[0][1].item() * 100
-                real_score = 100 - fake_score
-                return "Fake", real_score, fake_score
-            else:
-                real_score = logits[0][0].item() * 100
-                fake_score = 100 - real_score
-                return "Real", real_score, fake_score
+            # Apply softmax to convert logits to probabilities
+            probabilities = F.softmax(logits, dim=-1)
+
+            # Get the predicted class
+            prediction = torch.argmax(probabilities, dim=-1).item()
+
+            # Extract the probabilities for fake and real
+            fake_score = probabilities[0][0].item() * 100  # Probability for "Fake" (class 0)
+            real_score = probabilities[0][1].item() * 100  # Probability for "Real" (class 1)
+
+            # Return the result with proper scores
+            return "Fake" if prediction == 0 else "Real", real_score, fake_score
     except Exception as e:
         print(f"Error in BERT model prediction: {str(e)}")
         return None
