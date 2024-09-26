@@ -13,6 +13,8 @@ If you don't have Python installed, you can download it from the official Python
 
 2. Git: Make sure Git is installed to clone the repository.
 To check if Git is installed, use the following command
+
+
 git --version
 
 3. Clone the repository :
@@ -20,10 +22,15 @@ git clone https://github.com/DanielRusanov/fakenewsBERT
 
 4. Navigate to the project directory:
 After cloning, change into the project directory:
+
+
 cd project-directory
 
 6. Install dependencies:
+
+
 pip install -r requirements.txt
 
 7. Run the project:
+
 python app.py
