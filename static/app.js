@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Show loading animation
         resultContainer.style.opacity = '0';
         resultContainer.style.display = 'flex';
 
