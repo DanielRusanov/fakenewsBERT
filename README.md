@@ -9,7 +9,6 @@ python --version
 If you don't have Python installed, you can download it from the official Python website. https://www.python.org/
 
 2. Git: Make sure Git is installed to clone the repository.
-
 To check if Git is installed, use the following command
 git --version
 
