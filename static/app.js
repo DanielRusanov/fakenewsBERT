@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Dark mode toggle
+    // Dark mode 
     const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
 
-    // Check localStorage to see if dark mode was previously enabled
     if (localStorage.getItem('darkMode') === 'enabled') {
         document.body.classList.add('dark-mode');
     }
@@ -10,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleDarkModeButton.addEventListener('click', function () {
         document.body.classList.toggle('dark-mode');
 
-        // Store the dark mode preference in localStorage
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('darkMode', 'enabled');
         } else {
@@ -18,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Hide the result and pie chart by default
+    // pie chart
     const resultContainer = document.getElementById('result-container');
     resultContainer.style.display = 'none';
 
@@ -38,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
         resultContainer.style.opacity = '0';
         resultContainer.style.display = 'flex';
 
-        // Simulate a delay for better animation experience (optional)
         setTimeout(async function () {
             // Send the input text to the Flask backend using a POST request
             try {
@@ -52,14 +49,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const result = await response.json();
 
-                // Handle any errors from the backend
+                // Handle errors 
                 if (result.error) {
                     document.getElementById('result').innerHTML = `Error: ${result.error}`;
                     resultContainer.style.display = 'flex'; // Show error message container
                     return;
                 }
 
-                // Show the result container after successful submission
+                // result container after successful submission
                 resultContainer.style.opacity = '1';
 
                 // Update the result text
@@ -73,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
                 alert('Something went wrong. Please try again.');
             }
-        }, 500); // 0.5s delay to simulate smooth animation
+        }, 500); 
     });
 
     // Function to update the pie chart progress based on real and fake score
@@ -91,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pieChart.style.background = `conic-gradient(
             #28a745 0deg ${realAngle}deg, 
             #dc3545 ${realAngle}deg 360deg
-        )`; // Green for real, red for fake
+        )`; 
 
         // Update the text inside the pie chart
         scorePercentElem.textContent = `${realPercentage.toFixed(1)}%`;

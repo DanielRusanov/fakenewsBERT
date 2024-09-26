@@ -12,13 +12,13 @@
     <script>
         (function () {
             if (localStorage.getItem('darkMode') === 'enabled') {
-                document.documentElement.classList.add('dark-mode'); // Apply dark mode class
+                document.documentElement.classList.add('dark-mode'); 
             }
         })();
     </script>
 
     <style>
-        /* Reuse the same styles as the original stacked model page */
+       
         body {
             font-family: 'Roboto', sans-serif;
             display: flex;
@@ -95,7 +95,7 @@
             right: 20px;
         }
 
-        /* Dark mode button style */
+     
         .dark-mode button {
             background-color: #FFC107;
             color: black;
@@ -163,7 +163,7 @@
             z-index: 1;
         }
 
-        /* Dark mode styles */
+      
         .dark-mode body {
             background-color: #333;
             color: white;
@@ -183,7 +183,6 @@
             background-color: #333;
         }
 
-        /* Slider switch styling */
         .switch {
             position: absolute;
             top: 20px;
@@ -231,7 +230,7 @@
             transform: translateX(26px);
         }
 
-        /* Footer */
+    
         footer {
             margin-top: 70px;
             text-align: center;
@@ -246,7 +245,7 @@
             text-decoration: underline;
         }
 
-        /* Responsive design for smaller screens */
+     
         @media (max-width: 768px) {
             form,
             #result,
@@ -266,7 +265,7 @@
 </head>
 
 <body>
-    <!-- Navbar -->
+   
     <nav class="navbar">
         <div class="navbar-left">
             <a href="/"><i class="fas fa-home"></i> Home</a>
@@ -282,12 +281,12 @@
         </div>
     </nav>
 
-    <!-- Title -->
+    
     <h1>BERT Fake News Detector</h1>
 
     <h2>This tool uses a BERT model to analyze news articles and determine whether they are likely to be fake or real.</h2>
 
-    <!-- Form to input news text -->
+
     <form id="predictForm">
         <textarea id="newsInput" placeholder="Enter a news article here..." name="news"></textarea>
         <div class="button-container">
@@ -295,7 +294,7 @@
         </div>
     </form>
 
-    <!-- Prediction result -->
+  
     <div id="result-container">
         <div id="result"></div>
         <div class="pie-chart">
@@ -303,18 +302,18 @@
         </div>
     </div>
 
-    <!-- Link to bertapp.js -->
+  
     <script src="static/bertapp.js"></script>
 
     <footer>
         <p>Disclaimer: This tool uses machine learning to analyze text. Predictions are not always 100% accurate. Please double-check facts from reliable sources.</p>
     </footer>
 
-    <!-- Toggle dark mode script -->
+ 
     <script>
         const toggleDarkModeCheckbox = document.getElementById('toggle-dark-mode');
 
-        // Check localStorage to see if dark mode was previously enabled
+        // dark mode 
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.documentElement.classList.add('dark-mode');
             toggleDarkModeCheckbox.checked = true;

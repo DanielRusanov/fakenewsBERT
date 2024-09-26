@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Dark mode toggle
+    // Dark mode 
     const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
 
-    // Check localStorage to see if dark mode was previously enabled
     if (localStorage.getItem('darkMode') === 'enabled') {
         document.body.classList.add('dark-mode');
     }
@@ -10,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleDarkModeButton.addEventListener('click', function () {
         document.body.classList.toggle('dark-mode');
 
-        // Store the dark mode preference in localStorage
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('darkMode', 'enabled');
         } else {
@@ -18,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Hide the result and pie chart by default
+    // pie chart
     const resultContainer = document.getElementById('result-container');
     resultContainer.style.display = 'none';
 
@@ -34,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Show loading animation or feedback
         resultContainer.style.opacity = '0';
         resultContainer.style.display = 'flex';
 
@@ -42,9 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const response = await fetch('/bert-predict', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',  // Send as JSON
+                    'Content-Type': 'application/json',  
                 },
-                body: JSON.stringify({ news: newsText }),  // Send input news text as JSON
+                body: JSON.stringify({ news: newsText }),  
             });
 
             const result = await response.json();
@@ -58,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
             resultContainer.style.opacity = '1';
             document.getElementById('result').innerHTML = `Prediction: ${result.prediction}<br>(Fake: ${result.fake_score.toFixed(2)}%, Real: ${result.real_score.toFixed(2)}%)`;
 
-            // Update pie chart
             updatePieChart(result.real_score, result.fake_score);
 
         } catch (error) {
@@ -67,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Function to update the pie chart progress based on real and fake score
+    //update the pie chart progress based on real and fake score
     function updatePieChart(realScore, fakeScore) {
         const pieChart = document.querySelector('.pie-chart');
         const realAngle = (realScore / 100) * 360;

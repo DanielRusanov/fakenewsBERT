@@ -1,4 +1,4 @@
-# Import necessary libraries
+# Import  libraries
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import StackingClassifier
@@ -16,7 +16,7 @@ import torch
 import torch.nn.functional as F
 from transformers import DistilBertForSequenceClassification, DistilBertTokenizer
 
-# Flask app initialization
+# Flask app 
 app = Flask(__name__)
 
 # Function to clean the text
@@ -35,21 +35,20 @@ def clean_text(text):
 
 # Train and save the Stacking Model if it does not exist
 def train_and_save_stacking_model():
-    # Load datasets
     df_fake = pd.read_csv("Fake.csv")
     df_real = pd.read_csv("True.csv")
 
     # Add labels
-    df_fake['label'] = 1  # Fake news
-    df_real['label'] = 0  # Real news
+    df_fake['label'] = 1  
+    df_real['label'] = 0  
 
     # Sample 20,000 articles from each dataset to balance them
     df_fake_sample = df_fake.sample(n=20000, random_state=42, replace=False)
     df_real_sample = df_real.sample(n=20000, random_state=42, replace=False)
 
-    # Combine sampled datasets
+    # Combine and shuffle sampled datasets
     df = pd.concat([df_fake_sample, df_real_sample])
-    df = df.sample(frac=1).reset_index(drop=True)  # Shuffle dataset
+    df = df.sample(frac=1).reset_index(drop=True)  
 
     # Split into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(df['text'], df['label'], test_size=0.2, random_state=42)
@@ -79,7 +78,7 @@ def train_and_save_stacking_model():
     print("Stacking model and vectorizer saved.")
 
 
-# Try to load the Stacked model and vectorizer, if they don't exist, train and save them
+# load the Stacked model and vectorizer
 try:
     best_stacked_model = joblib.load('best_stacking_model.pkl')
     vectorization = joblib.load('vectorizer.pkl')
@@ -104,8 +103,8 @@ def manual_testing(news):
         cleaned_text = clean_text(news)
         vectorized_text = vectorization.transform([cleaned_text])
         proba_stacked = best_stacked_model.predict_proba(vectorized_text)
-        fake_prob = proba_stacked[0][0] * 100  # Probability of being Fake
-        real_prob = proba_stacked[0][1] * 100  # Probability of being Real
+        fake_prob = proba_stacked[0][0] * 100  
+        real_prob = proba_stacked[0][1] * 100  
         return {"Fake Probability": fake_prob, "Real Probability": real_prob}
     except Exception as e:
         print(f"Error in stacked model prediction: {str(e)}")
@@ -114,7 +113,7 @@ def manual_testing(news):
 # Function for prediction using BERT model
 def predict_news_bert(news_text):
     try:
-        cleaned_text = clean_text(news_text)  # Clean text consistently
+        cleaned_text = clean_text(news_text)  
         inputs = tokenizer(cleaned_text, return_tensors="pt", padding=True, truncation=True, max_length=512)
         inputs = {key: value.to(device) for key, value in inputs.items()}
         with torch.no_grad():
@@ -128,8 +127,8 @@ def predict_news_bert(news_text):
             prediction = torch.argmax(probabilities, dim=-1).item()
 
             # Extract the probabilities for fake and real
-            fake_score = probabilities[0][0].item() * 100  # Probability for "Fake" (class 0)
-            real_score = probabilities[0][1].item() * 100  # Probability for "Real" (class 1)
+            fake_score = probabilities[0][0].item() * 100  
+            real_score = probabilities[0][1].item() * 100  
 
             # Return the result with proper scores
             return "Fake" if prediction == 0 else "Real", real_score, fake_score
@@ -137,7 +136,7 @@ def predict_news_bert(news_text):
         print(f"Error in BERT model prediction: {str(e)}")
         return None
 
-# Route to serve the homepage
+# Routes for pages
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -170,7 +169,7 @@ def predict():
 @app.route('/bert-predict', methods=['POST'])
 def bert_predict():
     try:
-        data = request.get_json()  # Get JSON data from the request
+        data = request.get_json()  
         news_text = data.get('news')
 
         if not news_text:
@@ -187,7 +186,7 @@ def bert_predict():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Route for serving the BERT page
+# Route for serving the BERT model page
 @app.route('/bert')
 def bert_page():
     return render_template('bert.html')

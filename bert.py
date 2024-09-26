@@ -1,4 +1,4 @@
-# Step 1: Import libraries
+#Import libraries
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification, Trainer, TrainingArguments
 from datasets import Dataset
 import pandas as pd
@@ -19,9 +19,9 @@ def clean_text(text):
     
     return text
 
-# Step 2: Load the datasets
+# Load the datasets
 def load_and_combine_datasets(fake_news_file, real_news_file, max_articles=20000):
-    # Load the fake and real news datasets
+
     fake_news = pd.read_csv(fake_news_file)
     real_news = pd.read_csv(real_news_file)
 
@@ -37,12 +37,12 @@ def load_and_combine_datasets(fake_news_file, real_news_file, max_articles=20000
     combined_data = pd.concat([fake_news, real_news])
 
     # Limit to the first `max_articles` articles
-    combined_data = combined_data.sample(frac=1).reset_index(drop=True)  # Shuffle the dataset
-    combined_data = combined_data[:max_articles]  # Limit to the first max_articles
+    combined_data = combined_data.sample(frac=1).reset_index(drop=True)  
+    combined_data = combined_data[:max_articles]  
 
     return combined_data
 
-# Step 3: Tokenize the dataset
+# Tokenize the dataset
 def tokenize_data(combined_data):
     # Convert the DataFrame to a Hugging Face Dataset
     dataset = Dataset.from_pandas(combined_data)
@@ -57,27 +57,27 @@ def tokenize_data(combined_data):
     tokenized_dataset = dataset.map(tokenize_function, batched=True)
     return tokenized_dataset
 
-# Step 4: Split the dataset into train and test sets
+# Split the dataset into train and test sets
 def split_dataset(tokenized_dataset, test_size=0.2):
     train_test_split = tokenized_dataset.train_test_split(test_size=test_size)
     return train_test_split['train'], train_test_split['test']
 
-# Step 5: Fine-tune the DistilBERT model (faster, smaller)
+# Fine-tune and load the DistilBERT model 
 def train_bert_model(train_dataset, test_dataset, output_dir='./bert_fine_tuned'):
-    # Load the pretrained DistilBERT model
+    
     model = DistilBertForSequenceClassification.from_pretrained('distilbert-base-uncased', num_labels=2)
 
     # Define training arguments
     training_args = TrainingArguments(
         output_dir=output_dir,
-        eval_strategy="epoch",  # Updated from evaluation_strategy
+        eval_strategy="epoch",  
         learning_rate=2e-5,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
-        num_train_epochs=1,  # Reduced epochs for faster training
+        num_train_epochs=1, 
         weight_decay=0.01,
-        logging_dir='./logs',  # Directory for logging
-        logging_steps=10,  # Log progress frequently
+        logging_dir='./logs',  
+        logging_steps=10,  
     )
 
     # Initialize the Trainer
@@ -95,9 +95,9 @@ def train_bert_model(train_dataset, test_dataset, output_dir='./bert_fine_tuned'
     model.save_pretrained(output_dir)
     print(f"Model saved to {output_dir}")
 
-# Step 6: Main execution function
+# Main execution function
 if __name__ == "__main__":
-    # File paths for your datasets (Update to the correct filenames)
+
     fake_news_file = 'Fake.csv'
     real_news_file = 'True.csv'
 

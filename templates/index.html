@@ -13,11 +13,11 @@
 
     <title>Fake News Detector</title>
 
-    <!-- Load dark mode class immediately if dark mode is enabled -->
+
     <script>
         (function () {
             if (localStorage.getItem('darkMode') === 'enabled') {
-                document.documentElement.classList.add('dark-mode'); // Apply dark mode class
+                document.documentElement.classList.add('dark-mode'); 
             }
         })();
     </script>
@@ -27,7 +27,7 @@
 
 <body>
 
-    <!-- Navbar -->
+
 <nav class="navbar">
     <div class="navbar-left">
         <a href="/"><i class="fas fa-home"></i> Home</a>
@@ -44,12 +44,11 @@
 </nav>
    
 
-    <!-- Title -->
+ 
     <h1>Fake News Detector</h1>
 
     <h2>This tool analyzes news articles to determine whether they are likely to be fake or real.</h2>
 
-    <!-- Form to input news text -->
     <form id="predictForm">
         <textarea id="newsInput" placeholder="Enter a news article here..."></textarea>
         <div class="button-container">
@@ -57,7 +56,6 @@
         </div>
     </form>
 
-    <!-- Prediction result and pie chart -->
     <div id="result-container">
         <div id="result"></div>
         <div class="pie-chart">
@@ -65,21 +63,19 @@
         </div>
     </div>
 
-    <!-- Include the app.js file -->
+   
     <script src="static/app.js"></script>
 
     <footer>
         <p>Disclaimer: This tool uses machine learning to analyze text. Predictions are not always 100% accurate. Please double-check facts from reliable sources.</p>
     </footer>
 
-    <!-- Toggle dark mode script -->
     <script>
         const toggleDarkModeCheckbox = document.getElementById('toggle-dark-mode');
 
-        // Check localStorage to see if dark mode was previously enabled
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.documentElement.classList.add('dark-mode');
-            toggleDarkModeCheckbox.checked = true; // Set slider to "on"
+            toggleDarkModeCheckbox.checked = true; 
 
         }
 

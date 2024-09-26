@@ -83,7 +83,6 @@
             }
         }
 
-        /* Dark Mode Styling */
         .dark-mode {
             background-color: #333;
         }
@@ -106,7 +105,7 @@
             background-color: #e0a800;
         }
 
-        /* Slider switch styling */
+        
         .switch {
             position: absolute;
             top: 20px;
@@ -146,7 +145,7 @@
             transition: 0.4s;
         }
 
-         /* Moon icon next to the slider */
+         
          .moon-icon {
             position: absolute;
             top: 24px;
@@ -170,7 +169,7 @@
 </head>
 
 <body>
-    <!-- Navbar -->
+  
     <nav class="navbar">
         <div class="navbar-left">
             <a href="/"><i class="fas fa-home"></i> Home</a>
@@ -211,19 +210,17 @@
     </div>
 
     <script>
-        // Dark Mode Toggle
+        // Dark Mode 
         const toggleDarkModeCheckbox = document.getElementById('toggle-dark-mode');
 
-        // Check localStorage to see if dark mode was previously enabled
         if (localStorage.getItem('darkMode') === 'enabled') {
             document.body.classList.add('dark-mode');
-            toggleDarkModeCheckbox.checked = true; // Set slider to "on"
+            toggleDarkModeCheckbox.checked = true; 
         }
 
         toggleDarkModeCheckbox.addEventListener('change', function () {
             document.body.classList.toggle('dark-mode');
 
-            // Store the dark mode preference in localStorage
             if (document.body.classList.contains('dark-mode')) {
                 localStorage.setItem('darkMode', 'enabled');
             } else {
